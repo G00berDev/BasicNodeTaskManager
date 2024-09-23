@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <div class="form">
+        <form action="/tasks" method="POST">
+            <fieldset>
+                <legend>Add New Task</legend>
+                <input type="text" name="name" placeholder="New task name" required>
+                <input type="text" name="description" placeholder="New task description" required>
+                <input type="date" name="date" required>
+                <button type="submit">Add Task</button>
+            </fieldset>         
+        </form>
+    </div>
+
+    <ul>
+        <% tasks.forEach(task => { %>
+            <li>
+                <div class="task">
+                    <p><strong>Date:</strong> <%= new Date(task.date).toLocaleDateString() %></p>
+    
+                    <!-- Edit form -->
+                    <form action="/tasks/<%= task.id %>" method="POST" style="display: flex; flex-direction: column;">
+                        <label for="name_<%= task.id %>">Name:</label>
+                        <input type="text" id="name_<%= task.id %>" name="name" value="<%= task.name %>" required>
+    
+                        <label for="date_<%= task.id %>">Date:</label>
+                        <input type="date" id="date_<%= task.id %>" name="date" value="<%= new Date(task.date).toISOString().split('T')[0] %>" required>
+    
+                        <label for="description_<%= task.id %>">Description:</label>
+                        <textarea id="description_<%= task.id %>" name="description" cols="40" rows="10" required><%= task.description %></textarea>
+    
+                        <div class="task-buttons" style="margin-top: 10px;">
+                            <button type="submit" class="update-button">Update</button>
+                        </div>
+                    </form>
+    
+                    <!-- Separate Delete form -->
+                    <form action="/tasks/<%= task.id %>/delete" method="POST" style="display:inline;">
+                        <button class="delete-button" type="submit" style="margin-top: 10px;">Delete</button>
+                    </form>
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+    
+</body>
+</html>
